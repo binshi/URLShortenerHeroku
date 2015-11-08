@@ -1,4 +1,4 @@
-# URLs schema
+# schema
  
 # --- !Ups
 CREATE SEQUENCE shorturl_id;
