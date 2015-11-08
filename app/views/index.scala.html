@@ -1,7 +1,48 @@
-@(message: String)
+@(userURLForm: Form[String], url: URL, mapUsers: Map[String, Int], shortURL: String)
 
-@main("Welcome to Play 2.1") {
-    
-    @play20.welcome(message)
-    
+@import helper._
+
+@main("Shortener2") {
+   <h4>Input original URL and click submit to shorten it </h4>
+   <h2>OR</h2>
+    <h4>Input the short URL and click display to see the ipaddress and hits:</h4>
+    @form(routes.Application.shortenURLAsPage) {
+        <div id="userForm">
+        	@inputText(userURLForm("URL")) 
+        	<input type="submit" name="actionType" value="Submit" id="button">
+        	<input type="submit" name="actionType" value="Display" id="button">
+        </div>
+    }
+    <p/>
+     @if(url!=null) {
+     <div>Shortened URL:
+   	 <script type="text/javascript">
+			shortenedURL = location.protocol + '//' + location.host +'/long/@url.shortURLPath'
+			document.write('<a href="'+shortenedURL+'\">'+shortenedURL+'</a>');
+		</script>
+		</div>
+		<div>
+			Original URL:<a href=@url.longURL">@url.longURL</a>
+		</div>
+	 }    
+	@if(mapUsers != null) {
+    	@if(mapUsers.isEmpty) {
+    		<h4>No records found</h4>
+    		} else {
+    	<div>Hit Statistics for short URL: @shortURL
+   		<table style="width:30%" border=1>
+   		<tr>
+   			<th>IPAddress</th>
+   			<th>Hits</th>
+   		</tr>
+    	@for((key, value) <- mapUsers) {
+    	<tr>
+    		<td>@key</td>
+    		<td>@value</td>
+    	</tr>
+    }
+    </table>
+	</div>  
+	}
+    }
 }
